@@ -1,13 +1,19 @@
 <template>
     <div class="app font-monospace ">
         <div class="content">
-            <AppInfo/>
+            <AppInfo 
+            :allMoviesCount="movies.length"
+            :favouriteMoviesCount="movies.filter(a => a.favourite).length"
+            />
             <div class="search-panel">
                 <SearchPanel/>
                 <AppFilter/>
-                <MovieList/>
+                <MovieList 
+               :movies="movies"
+               @onLike="onLikeCatch"
+               />
             </div>
-            <MovieAddForm/>
+            <MovieAddForm @createMovie="createMovie"/>
         </div>
     </div>
 </template>
@@ -26,6 +32,54 @@ import MovieAddForm from '@/component/movie-add-form/MovieAddForm.vue'
         AppFilter,
         MovieList,
         MovieAddForm
+    },
+    data(){
+        return{
+            movies:[
+                {
+                    id:1,
+                    name:'Oamr',
+                    viewers:811,
+                    favourite:true,
+                    like:true
+                },
+                {
+                    id:2,
+                    name:'Last time',
+                    viewers:544,
+                    favourite:true,
+                    like:true
+                },
+                {
+                    id:3,
+                    name:'Good health',
+                    viewers:811,
+                    favourite:true,
+                    like:true
+                },
+                {
+                    id:4,
+                    name:'Good boy',
+                    viewers:811,
+                    favourite:false,
+                    like:false
+                }
+            ]
+        }
+    },
+    methods:{
+        createMovie(item){
+            this.movies.push(item)
+        },
+        onLikeCatch(id){
+            const arr = this.movies.map(item => {
+                if(item.id == id){
+                   item.like = !item.like
+                }
+                return item     
+            })
+            // console.log(arr,like);
+        }
     }
 }
 </script>

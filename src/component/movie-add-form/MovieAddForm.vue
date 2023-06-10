@@ -1,17 +1,52 @@
 <template>
     <div class="movie-add-form pt-4 mt-3">
         <h3>Add new one ! </h3>
-        <form action="" class="add-form d-flex">
-            <input type="text"  class="form-control new-movie-label" placeholder="What type ?">
-            <input type="text"  class="form-control new-movie-label" placeholder="How many times was seen ?">
-            <button class="btn btn-outline-dark">Add</button>
+        <form  class="add-form d-flex" @submit.prevent >
+            <input type="text"  class="form-control new-movie-label" 
+             placeholder="What type ?" 
+             :value="name"
+             @input="name = $event.target.value"
+             />
+            <input type="text" 
+            class="form-control new-movie-label"
+             placeholder="How many times was seen ?"
+             :value="viewers"
+             @input="viewers = $event.target.value"
+             />
+            <button 
+            class="btn btn-outline-dark" type="submit" @click="addMovie"
+            >
+            Add
+          </button>
         </form>
     </div>
 </template>
 
 <script>
 export default {
-    
+    data(){
+        return {
+            name :'',
+            viewers: ''
+        }
+    },
+    methods:{
+        addMovie(e){
+            const movies = {
+                id: Date.now(),
+                name: this.name,
+                viewers: this.viewers,
+                favourite: false,
+                like: false,
+            }
+            this.$emit('createMovie',movies)
+            this.id = '',
+            this.name = '',
+            this.viewers = '',
+            this.favourite = false,
+            this.like = false
+        }
+    }
 }
 </script>
 

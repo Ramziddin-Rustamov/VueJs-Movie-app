@@ -1,8 +1,10 @@
 <template>
     <ul class="movie-list list-group">
-     <MovieListItem />
-     <MovieListItem />
-     <MovieListItem />
+     <MovieListItem 
+      v-for="movie in movies"
+      :movies='movie'
+      @onLike="$emit('onLike',movie.id)"
+      />
     </ul>
 </template>
 <script>
@@ -10,6 +12,12 @@ import MovieListItem from '@/component/movie-list-item/MovieListItem.vue'
 export default {
     components:{
         MovieListItem
+    },
+    props:{
+        movies:{
+            type: Array,
+            required:true
+        }
     }
 }
 </script>

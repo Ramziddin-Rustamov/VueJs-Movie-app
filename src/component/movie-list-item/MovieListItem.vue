@@ -1,7 +1,11 @@
 <template>
-       <li class="list-group-item favourite d-flex justify-content-between ">
-        <span class="list-group-item-label ">Label</span>
-        <input type="number" class="list-group-item-input" defaultValue="111" >
+       <li class="list-group-item  d-flex justify-content-between "
+       :class="[{like:movies. },{favourite:movies.favourite}]"
+       :key="movies.id"
+       >
+        <span @click="onLike" class="list-group-item-label ">{{ movies.name }}</span>
+        <input type="number" class="list-group-item-input" :value="movies.viewers">
+
         <div class=" justify-content-center d-flex align-items-center ">
             <button type="button" class="btn-cookie btn-sm">
                 <i class="fas fa-cookie"></i>
@@ -13,11 +17,22 @@
                 <i class="fas fa-star"></i>
             </button>
         </div>
+
         </li>
 </template>
 <script>
 export default {
-    
+    props:{
+        movies:{
+            type: Object,
+            required :true
+        },
+    },
+    methods:{
+        onLike(){
+            this.$emit('onLike',this.movies.id)
+        }
+    }
 }
 </script>
 <style scoped>
