@@ -7,9 +7,9 @@
             />
             <div class="search-panel">
                 <SearchPanel :updateTermHandler="updateTermHandler"/>
-                <AppFilter/>
+                <AppFilter :updateFilterHandler="updateFilterHandler" :filterName='filter'/>
                 <MovieList 
-               :movies="onSearchHandler(movies , term)"
+               :movies="onFilterHandler(onSearchHandler(movies , term),filter)"
                @onTogle="onTogleHandler"
                @onRemove="onRemoveHandler"
                />
@@ -37,12 +37,13 @@ import MovieAddForm from '@/component/movie-add-form/MovieAddForm.vue'
     data(){
         return{
             term : '', 
+            filter : 'all', 
             movies:[
                 {
                     id:1,
                     name:'Umar',
                     viewers:811,
-                    favourite:true,
+                    favourite:false,
                     like:true
                 },
                 {
@@ -62,7 +63,7 @@ import MovieAddForm from '@/component/movie-add-form/MovieAddForm.vue'
                 {
                     id:4,
                     name:'aaaa',
-                    viewers:811,
+                    viewers:200,
                     favourite:true,
                     like:true
                 }
@@ -92,6 +93,22 @@ import MovieAddForm from '@/component/movie-add-form/MovieAddForm.vue'
         },
         updateTermHandler(term){
             this.term = term 
+        },
+        onFilterHandler(arr, filter){
+            switch (filter) {
+                case "popular":
+                    return arr.filter(c => c.like)
+                    break;
+                case "mostViewers":
+                    return arr.filter(c => c.viewers >= 500)
+                    break;            
+                default:
+                    return arr
+                    break;
+            }
+        },
+        updateFilterHandler(filter){
+            this.filter = filter;
         }
     }
 }
