@@ -4,11 +4,33 @@
         class="form-control search-input my-3" 
         placeholder="Search movies" 
         autofocus
+        :value="term"
+        @input="changeHandler" 
         id="">
+        <!-- @input every time input was changed it changed directly ! -->
     </div>
 </template>
 
 <script>
+export default {
+    props: {
+        updateTermHandler: {
+            type: Function,
+            required: true
+        }
+    },
+    data(){
+        return{
+            term : ''
+        }
+    },
+    methods:{
+        changeHandler(e){
+            this.term  = e.target.value
+            this.updateTermHandler(this.term)
+        }
+    }
+}
 </script>
 
 <style scoped>

@@ -1,16 +1,17 @@
 <template>
        <li class="list-group-item  d-flex justify-content-between "
-       :class="[{like:movies. },{favourite:movies.favourite}]"
+       :class="[{like:movies.like },{favourite:movies.favourite}]"
        :key="movies.id"
        >
-        <span @click="onLike" class="list-group-item-label ">{{ movies.name }}</span>
+        <span @click="$emit('onTogle',{id:movies.id,prop:'like'})" class="list-group-item-label ">{{ movies.name }}</span>
         <input type="number" class="list-group-item-input" :value="movies.viewers">
 
         <div class=" justify-content-center d-flex align-items-center ">
-            <button type="button" class="btn-cookie btn-sm">
+            <button type="button" class="btn-cookie btn-sm" 
+            @click="$emit('onTogle',{id:movies.id,prop:'favourite'})">
                 <i class="fas fa-cookie"></i>
             </button>
-            <button type="button" class="btn-trash btn-sm">
+            <button type="button" class="btn-trash btn-sm" @click="$emit('onRemove',movies.id)">
                 <i class="fas fa-trash"></i>
             </button>
             <button type="button" class="btn-star btn-sm">

@@ -6,11 +6,12 @@
             :favouriteMoviesCount="movies.filter(a => a.favourite).length"
             />
             <div class="search-panel">
-                <SearchPanel/>
+                <SearchPanel :updateTermHandler="updateTermHandler"/>
                 <AppFilter/>
                 <MovieList 
-               :movies="movies"
-               @onLike="onLikeCatch"
+               :movies="onSearchHandler(movies , term)"
+               @onTogle="onTogleHandler"
+               @onRemove="onRemoveHandler"
                />
             </div>
             <MovieAddForm @createMovie="createMovie"/>
@@ -35,10 +36,11 @@ import MovieAddForm from '@/component/movie-add-form/MovieAddForm.vue'
     },
     data(){
         return{
+            term : '', 
             movies:[
                 {
                     id:1,
-                    name:'Oamr',
+                    name:'Umar',
                     viewers:811,
                     favourite:true,
                     like:true
@@ -52,33 +54,44 @@ import MovieAddForm from '@/component/movie-add-form/MovieAddForm.vue'
                 },
                 {
                     id:3,
-                    name:'Good health',
+                    name:'Good',
                     viewers:811,
                     favourite:true,
                     like:true
                 },
                 {
                     id:4,
-                    name:'Good boy',
+                    name:'aaaa',
                     viewers:811,
-                    favourite:false,
-                    like:false
+                    favourite:true,
+                    like:true
                 }
-            ]
+            ], 
         }
     },
     methods:{
         createMovie(item){
             this.movies.push(item)
         },
-        onLikeCatch(id){
-            const arr = this.movies.map(item => {
+        onTogleHandler({id , prop}){
+           this.movies =  this.movies.map(item => {
                 if(item.id == id){
-                   item.like = !item.like
+                   return {...item, [prop]: !item[prop]}
                 }
                 return item     
-            })
-            // console.log(arr,like);
+            });
+        },
+        onRemoveHandler(id){
+            this.movies = this.movies.filter(c => c.id != id)
+        },
+        onSearchHandler(arr, term){
+            if(term.length == 0){
+                return arr
+            }
+            return arr.filter(c => c.name.toLowerCase().indexOf(term) > -1)
+        },
+        updateTermHandler(term){
+            this.term = term 
         }
     }
 }

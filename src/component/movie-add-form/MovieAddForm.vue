@@ -32,6 +32,9 @@ export default {
     },
     methods:{
         addMovie(e){
+            if(!this.name || !this.viewers){
+                return alert('Please fill the form with information !')
+            }
             const movies = {
                 id: Date.now(),
                 name: this.name,

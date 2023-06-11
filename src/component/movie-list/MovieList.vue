@@ -3,7 +3,8 @@
      <MovieListItem 
       v-for="movie in movies"
       :movies='movie'
-      @onLike="$emit('onLike',movie.id)"
+      @onTogle="$emit('onTogle',$event)"
+      @onRemove="$emit('onRemove',$event)"
       />
     </ul>
 </template>
