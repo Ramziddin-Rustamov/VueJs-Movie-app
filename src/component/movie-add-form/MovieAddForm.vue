@@ -2,22 +2,22 @@
     <div class="movie-add-form pt-4 mt-3">
         <h3>Add new one ! </h3>
         <form  class="add-form d-flex" @submit.prevent >
-            <input type="text"  class="form-control new-movie-label" 
+          <Input
+           class="new-movie-label"  
              placeholder="What type ?" 
-             :value="name"
-             @input="name = $event.target.value"
+             v-model="name"
              />
-            <input type="text" 
-            class="form-control new-movie-label"
-             placeholder="How many times was seen ?"
-             :value="viewers"
-             @input="viewers = $event.target.value"
+              <Input
+           class="new-movie-label"  
+             placeholder="Viewers number ?" 
+             v-model="viewers"
              />
-            <button 
+
+            <PrimaryButton 
             class="btn btn-outline-dark" type="submit" @click="addMovie"
             >
             Add
-          </button>
+          </PrimaryButton>
         </form>
     </div>
 </template>

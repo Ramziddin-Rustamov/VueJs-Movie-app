@@ -1,13 +1,11 @@
 <template>
     <div>
-        <input type="text"
-        class="form-control search-input my-3" 
+        <Input 
+        class="search-input my-3" 
         placeholder="Search movies" 
         autofocus
-        :value="term"
-        @input="changeHandler" 
-        id="">
-        <!-- @input every time input was changed it changed directly ! -->
+        v-model="term"
+         />
     </div>
 </template>
 

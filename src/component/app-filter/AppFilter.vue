@@ -1,9 +1,6 @@
 <template>
   <div class="btn-group py-3">
-      <!-- <button class="btn" :class="[filterName=='all' ? 'btn-primary':'btn-outline-primary']" type="button" @click="FilterHandler('all')">All</button>
-      <button class="btn" :class="[filterName=='popular' ? 'btn-primary':'btn-outline-primary']" type="button" @click="FilterHandler('popular')">Famous !</button>
-      <button class="btn" :class="[filterName=='mostViewers' ? 'btn-primary':'btn-outline-primary']"  type="button"  @click="FilterHandler('mostViewers')">Most Seen ! </button> -->
-      <button 
+      <PrimaryButton 
       v-for="btn in filterButtons"
       class="btn"
       type="button" 
@@ -12,7 +9,7 @@
       :key="btn.name"
       >
        {{btn.title}}
-       </button>
+       </PrimaryButton>
     </div>
 </template>
 <script>
