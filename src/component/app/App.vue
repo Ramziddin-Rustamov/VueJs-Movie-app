@@ -3,8 +3,7 @@
         <div class="content">
             <AppInfo 
             :allMoviesCount="movies.length"
-            :favouriteMoviesCount="movies.filter(a => a.favourite).length"
-            />
+            :favouriteMoviesCount="movies.filter(a => a.favourite).length" />
             <div class="search-panel">
                 <SearchPanel :updateTermHandler="updateTermHandler"/>
                 <AppFilter :updateFilterHandler="updateFilterHandler" :filterName='filter'/>
@@ -16,6 +15,21 @@
                @onTogle="onTogleHandler"
                @onRemove="onRemoveHandler"
                />
+
+               <Box class="d-flex justify-content-end">
+                    <nav aria-label="pagination">
+                        <ul class="pagination pagination-md pointer">
+                            <li  v-for="pageNumber in totalPage" class="pointer page-item"
+                             aria-current="page"
+                            :class="{'active':pageNumber == page}"
+                            :key="pageNumber"
+                            @click="changePage(pageNumber )"
+                            >
+                            <span class="page-link pointer">{{pageNumber}}</span>
+                            </li>
+                        </ul>
+                    </nav>
+               </Box>
             
             <MovieAddForm @createMovie="createMovie"/>
         </div>
@@ -43,15 +57,23 @@ import axios from "axios"
             term : '', 
             filter : 'all', 
             movies:[], 
-            isLoading:false
+            isLoading:false,
+            limit:10,
+            page:1,
+            totalPage: 0
         }
     },
     mounted() {
       this.fetchMovie()
     },
     methods:{
-        createMovie(item){
+         try {
+            async createMovie(item){
+            const response  =  await axios.post('https://jsonplaceholder.typicode.com/posts',item)
             this.movies.push(item)
+         } catch (error) {
+            alert(error.message)
+         }
         },
         onTogleHandler({id , prop}){
            this.movies =  this.movies.map(item => {
@@ -61,8 +83,13 @@ import axios from "axios"
                 return item     
             });
         },
-        onRemoveHandler(id){
-            this.movies = this.movies.filter(c => c.id != id)
+         async onRemoveHandler(id){
+            try {
+                const response = await axios.delete(`https://jsonplaceholder.typicode.com/posts/${id}`)
+                 this.movies = this.movies.filter(c => c.id != id)
+            } catch (error) {
+                console.log(error.message)
+            }
         },
         onSearchHandler(arr, term){
             if(term.length == 0){
@@ -92,20 +119,34 @@ import axios from "axios"
         async fetchMovie(){
           try {
             this.isLoading = true
-            const {data} = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10')
-            const newArr = data.map(item =>({
+            const response = await axios.get('https://jsonplaceholder.typicode.com/posts',{
+                params:{
+                    _limit : this.limit,
+                    _page : this.page,
+                }
+            })
+            const newArr = response.data.map(item =>({
                 id: item.id,
                 name :item.title,
                 like: false,
                 favourite:false,
                 viewers:item.id *10 /2
             }));
+            this.totalPage = Math.ceil(response.headers['x-total-count'] / this.limit)
             this.movies = newArr
           } catch (error) {
               alert(error.message)
           }finally{
               this.isLoading = false
           }
+        },
+        changePage(page){
+            this.page = page
+        }
+    },
+    watch:{
+        page(){
+            this.fetchMovie()
         }
     }
 }

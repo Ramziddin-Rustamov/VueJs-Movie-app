@@ -5,13 +5,12 @@
           <Input
            class="new-movie-label"  
              placeholder="What type ?" 
-             v-model="name"
-             />
-              <Input
+             @input="name = $event.target.value"
+              />
+            <Input
            class="new-movie-label"  
              placeholder="Viewers number ?" 
-             v-model="viewers"
-             />
+             @input="viewers = $event.target.value"/>
 
             <PrimaryButton 
             class="btn btn-outline-dark" type="submit" @click="addMovie"
@@ -27,7 +26,7 @@ export default {
     data(){
         return {
             name :'',
-            viewers: ''
+            viewers: '',
         }
     },
     methods:{
@@ -36,7 +35,6 @@ export default {
                 return alert('Please fill the form with information !')
             }
             const movies = {
-                id: Date.now(),
                 name: this.name,
                 viewers: this.viewers,
                 favourite: false,
