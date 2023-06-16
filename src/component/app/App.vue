@@ -67,8 +67,8 @@ import axios from "axios"
       this.fetchMovie()
     },
     methods:{
+        async createMovie(item){
          try {
-            async createMovie(item){
             const response  =  await axios.post('https://jsonplaceholder.typicode.com/posts',item)
             this.movies.push(item)
          } catch (error) {
@@ -106,7 +106,7 @@ import axios from "axios"
                     return arr.filter(c => c.like)
                     break;
                 case "mostViewers":
-                    return arr.filter(c => c.viewers >= 500)
+                    return arr.filter(c => c.viewers >5)
                     break;            
                 default:
                     return arr
