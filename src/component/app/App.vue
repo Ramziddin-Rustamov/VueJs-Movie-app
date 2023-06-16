@@ -8,12 +8,15 @@
             <div class="search-panel">
                 <SearchPanel :updateTermHandler="updateTermHandler"/>
                 <AppFilter :updateFilterHandler="updateFilterHandler" :filterName='filter'/>
-                <MovieList 
+            </div>
+                <Box class="fs-2 text-danjer text-center" v-if="!movies.length && !isLoading">There is no movie available here  !</Box>
+                <Loader class="fs-2 text-success text-center" v-else-if="isLoading">Loading..</Loader>
+                <MovieList v-else
                :movies="onFilterHandler(onSearchHandler(movies , term),filter)"
                @onTogle="onTogleHandler"
                @onRemove="onRemoveHandler"
                />
-            </div>
+            
             <MovieAddForm @createMovie="createMovie"/>
         </div>
     </div>
@@ -25,6 +28,7 @@ import SearchPanel from '@/component/search-panel/SearchPanel.vue'
 import AppFilter from '@/component/app-filter/AppFilter.vue'
 import MovieList from '@/component/movie-list/MovieList.vue'
 import MovieAddForm from '@/component/movie-add-form/MovieAddForm.vue'
+import axios from "axios"
 
  export default{
     components:{
@@ -38,37 +42,12 @@ import MovieAddForm from '@/component/movie-add-form/MovieAddForm.vue'
         return{
             term : '', 
             filter : 'all', 
-            movies:[
-                {
-                    id:1,
-                    name:'Umar',
-                    viewers:811,
-                    favourite:false,
-                    like:true
-                },
-                {
-                    id:2,
-                    name:'Last time',
-                    viewers:544,
-                    favourite:true,
-                    like:true
-                },
-                {
-                    id:3,
-                    name:'Good',
-                    viewers:811,
-                    favourite:true,
-                    like:true
-                },
-                {
-                    id:4,
-                    name:'aaaa',
-                    viewers:200,
-                    favourite:true,
-                    like:true
-                }
-            ], 
+            movies:[], 
+            isLoading:false
         }
+    },
+    mounted() {
+      this.fetchMovie()
     },
     methods:{
         createMovie(item){
@@ -109,6 +88,24 @@ import MovieAddForm from '@/component/movie-add-form/MovieAddForm.vue'
         },
         updateFilterHandler(filter){
             this.filter = filter;
+        },
+        async fetchMovie(){
+          try {
+            this.isLoading = true
+            const {data} = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10')
+            const newArr = data.map(item =>({
+                id: item.id,
+                name :item.title,
+                like: false,
+                favourite:false,
+                viewers:item.id *10 /2
+            }));
+            this.movies = newArr
+          } catch (error) {
+              alert(error.message)
+          }finally{
+              this.isLoading = false
+          }
         }
     }
 }
